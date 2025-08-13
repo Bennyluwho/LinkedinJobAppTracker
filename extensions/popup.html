@@ -2,26 +2,68 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <style>
-    body { font-family: system-ui, sans-serif; min-width: 260px; padding: 12px; }
-    button { padding: 8px 10px; border-radius: 10px; border: 1px solid #ccc; margin-right: 8px; cursor: pointer; }
-    #rowCount { color:#666; margin-left: 8px; }
-    #msg { margin-top: 10px; color: #555; min-height: 1em; }
-    .bar { margin-top: 8px; }
-  </style>
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="popup.css" />
+  <title>LinkedIn → CSV</title>
 </head>
 <body>
-  <div style="font-weight:600; margin-bottom:8px;">LinkedIn → CSV</div>
-  <div class="bar">
-    <button id="save">Save row</button>
-    <span id="rowCount"></span>
+  <div class="popup">
+    <header class="header">
+      <!-- Inline SVG icon to avoid external assets -->
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7a3 3 0 1 1 6 0v10h-2V7a1 1 0 1 0-2 0v10H4V7zM12 10h2v1.2c.6-.9 1.6-1.5 3-1.5 2.4 0 4 1.6 4 4.4V17h-2v-2.6c0-1.8-.9-2.8-2.3-2.8-1.6 0-2.7 1.1-2.7 3V17h-2v-7z"></path>
+        </svg>
+        <div class="title">
+          <div class="title-top">LinkedIn Job Tracker</div>
+          <div class="subtitle">Save → Export CSV</div>
+        </div>
+      </div>
+      <div class="chip" id="rowCount">0 saved</div>
+    </header>
+
+    <main class="content">
+      <div class="btn-row">
+        <button id="save" class="btn btn-primary" aria-label="Save current job row">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="label">Save row</span>
+          <span class="spinner" aria-hidden="true"></span>
+        </button>
+
+        <button id="exportCsv" class="btn btn-secondary" aria-label="Export CSV">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 19h14"/></svg>
+          </span>
+          <span class="label">Export CSV</span>
+        </button>
+
+        <button id="clear" class="btn btn-ghost" aria-label="Clear saved rows">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6v12m8-12v12M5 6l1-2h12l1 2"/></svg>
+          </span>
+          <span class="label">Clear</span>
+        </button>
+      </div>
+
+      <div id="msg" class="msg" role="status" aria-live="polite"></div>
+
+      <details class="hint">
+        <summary>Tips</summary>
+        <ul>
+          <li>Open a full job page (URL contains <code>/jobs/view/</code>)</li>
+          <li>Click <em>Save row</em> as you browse; export anytime</li>
+          <li>Use Data → Split text to columns if a row pastes into one cell</li>
+        </ul>
+      </details>
+    </main>
+
+    <footer class="footer">
+      <span>Local only • No data leaves your browser</span>
+    </footer>
   </div>
-  <div class="bar">
-    <button id="export">Export CSV</button>
-    <button id="clear">Clear</button>
-  </div>
-  <div id="msg"></div>
-  <small>Open a LinkedIn job page (URL has <code>/jobs/view/</code>) then click “Save row”.</small>
+
   <script src="popup.js"></script>
 </body>
 </html>
