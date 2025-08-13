@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: system-ui, sans-serif; min-width: 260px; padding: 12px; }
+    button { padding: 8px 10px; border-radius: 10px; border: 1px solid #ccc; margin-right: 8px; cursor: pointer; }
+    #rowCount { color:#666; margin-left: 8px; }
+    #msg { margin-top: 10px; color: #555; min-height: 1em; }
+    .bar { margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div style="font-weight:600; margin-bottom:8px;">LinkedIn → CSV</div>
+  <div class="bar">
+    <button id="save">Save row</button>
+    <span id="rowCount"></span>
+  </div>
+  <div class="bar">
+    <button id="export">Export CSV</button>
+    <button id="clear">Clear</button>
+  </div>
+  <div id="msg"></div>
+  <small>Open a LinkedIn job page (URL has <code>/jobs/view/</code>) then click “Save row”.</small>
+  <script src="popup.js"></script>
+</body>
+</html>
