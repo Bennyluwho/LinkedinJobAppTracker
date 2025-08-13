@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LinkedIn Job → CSV (Benny)",
+  "name": "LinkedIn Job → CSV",
   "version": "1.0.0",
   "description": "Save LinkedIn job details while browsing, then export one CSV.",
   "permissions": ["storage", "activeTab", "scripting", "downloads"],
