@@ -1,9 +1,8 @@
-const HEADERS = ["title","company","location","posted date","job url"]; // your schema
+const HEADERS = ["company","title","job url"]; // your schema
 
 function csvQuote(v){ return `"${String(v ?? "").replace(/"/g,'""')}"`; }
 function toRow(o){
-  return [o.title, o.company, o.location, o.posted_date_iso, o.job_url]
-    .map(csvQuote).join(",");
+  return [o.company, o.title, o.job_url].map(csvQuote).join(",");
 }
 
 function setRowCount(){
@@ -56,7 +55,7 @@ document.getElementById("save").onclick = async () => {
     chrome.storage.local.get({ rows: [] }, ({ rows }) => {
       // De-dupe by job_url
       const key = csvQuote(payload.job_url);
-      const filtered = rows.filter(r => !r.startsWith(key + ","));
+      const filtered = rows.filter(r => !r.endsWith("," + key));
       filtered.push(row);
       chrome.storage.local.set({ rows: filtered }, () => {
         msg.textContent = "Saved ✓";

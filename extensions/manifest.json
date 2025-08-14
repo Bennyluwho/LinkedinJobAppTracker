@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "description": "Save LinkedIn job details while browsing, then export one CSV.",
   "permissions": ["storage", "activeTab", "scripting", "downloads"],
-  "host_permissions": ["https://www.linkedin.com/jobs/view/*"],
+  "host_permissions": [
+    "https://www.linkedin.com/jobs/view/*"
+    ],
   "action": { "default_popup": "popup.html" }
 }
