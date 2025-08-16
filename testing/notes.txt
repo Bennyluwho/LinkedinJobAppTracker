@@ -1,0 +1,9 @@
+https://www.linkedin.com/jobs/collections/recommended/?currentJobId=...
+
+This is the format for the ../jobs/collections/.. view scrape data needed!
+example links:
+https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3864450479 : Epic
+https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4286064370 : Intuit
+https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4258571345 : Precision Castparts
+
+outerHTML for these links are already pasted in the testing!!
