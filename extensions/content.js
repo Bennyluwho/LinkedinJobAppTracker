@@ -47,7 +47,7 @@ function getCanonicalJobUrl() {
 
   let title = norm(titleEl?.textContent);
   // --- company extraction (view + collections support) ---
-  let company = "";
+let company = "";
 try {
   const companyElement =
     document.querySelector(".jobs-unified-top-card__company-name a") || // normal /jobs/view

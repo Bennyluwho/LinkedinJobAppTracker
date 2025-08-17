@@ -94,15 +94,3 @@ document.getElementById("clear").onclick = () => {
     setRowCount();
   });
 };
-
-chrome.commands.onCommand.addListener((command) => {
-  console.log("Command triggered:", command);
-  if (command === "save-row") {
-    document.getElementById("save-row")?.click();
-  } else if (command === "export-csv") {
-    document.getElementById("export-csv")?.click();
-  } else if (command === "clear-rows") {
-    document.getElementById("clear-rows")?.click();
-  }
-});
-
