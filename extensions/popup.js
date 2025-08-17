@@ -21,8 +21,14 @@ setRowCount();
 
 async function getActiveJobTabId(){
   const [tab] = await chrome.tabs.query({ active:true, currentWindow:true });
-  if (!tab || !/^https:\/\/www\.linkedin\.com\/jobs\/view\//.test(tab.url || "")) {
-    throw new Error("Open a LinkedIn job page first (URL must contain /jobs/view/).");
+  if (!tab) throw new Error("No active tab found.");
+
+  const url = tab.url || "";
+
+  // allow both /jobs/view/* and /jobs/collections/*
+  const ok = /^https:\/\/www\.linkedin\.com\/jobs\/(view|collections)\//.test(url);
+  if (!ok) {
+    throw new Error("Open a LinkedIn job page first (/jobs/view/ or /jobs/collections/).");
   }
   return tab.id;
 }
@@ -88,3 +94,15 @@ document.getElementById("clear").onclick = () => {
     setRowCount();
   });
 };
+
+chrome.commands.onCommand.addListener((command) => {
+  console.log("Command triggered:", command);
+  if (command === "save-row") {
+    document.getElementById("save-row")?.click();
+  } else if (command === "export-csv") {
+    document.getElementById("export-csv")?.click();
+  } else if (command === "clear-rows") {
+    document.getElementById("clear-rows")?.click();
+  }
+});
+

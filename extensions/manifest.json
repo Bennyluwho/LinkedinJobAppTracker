@@ -5,7 +5,31 @@
   "description": "Save LinkedIn job details while browsing, then export one CSV.",
   "permissions": ["storage", "activeTab", "scripting", "downloads"],
   "host_permissions": [
-    "https://www.linkedin.com/jobs/view/*"
+    "https://www.linkedin.com/jobs/view/*",
+    "https://www.linkedin.com/jobs/collections/*"
     ],
-  "action": { "default_popup": "popup.html" }
+  "action": { "default_popup": "popup.html" },
+  "commands": {
+    "save-row": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Save current LinkedIn job row"
+    },
+    "export-csv": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Export CSV"
+    },
+    "clear-rows": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Clear saved rows"
+    }
+  }
 }

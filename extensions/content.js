@@ -1,3 +1,27 @@
+function getCanonicalJobUrl() {
+  try {
+    const url = new URL(window.location.href);
+
+    // Case 1: collections page → extract currentJobId
+    const jobId = url.searchParams.get("currentJobId");
+    if (jobId) {
+      return `https://www.linkedin.com/jobs/view/${jobId}/`;
+    }
+
+    // Case 2: regular /jobs/view/<id>/ page
+    const m = url.pathname.match(/\/jobs\/view\/(\d+)/);
+    if (m) {
+      return `https://www.linkedin.com/jobs/view/${m[1]}/`;
+    }
+
+    // Fallback: just return the raw URL
+    return window.location.href;
+  } catch (e) {
+    console.warn("Error canonicalizing job URL:", e);
+    return window.location.href;
+  }
+}
+
 (async function () {
   const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
 
@@ -22,11 +46,30 @@
     document.querySelector("[data-test='job-details__company-url'], a[href*='/company/'], [class*='company-name']");
 
   let title = norm(titleEl?.textContent);
-  let company = norm(companyEl?.textContent);
+  // --- company extraction (view + collections support) ---
+  let company = "";
+try {
+  const companyElement =
+    document.querySelector(".jobs-unified-top-card__company-name a") || // normal /jobs/view
+    document.querySelector(".job-details-jobs-unified-top-card__company-name a") || // collections detail panel
+    document.querySelector("a[data-control-name='jobdetails_company_link']"); // extra fallback
+
+  if (companyElement) {
+    company = companyElement.innerText.trim();
+
+    // cleanup: strip trailing bullets like "• 10,001+ employees"
+    company = company.replace(/\s*[•·|].*$/, "").trim();
+  }
+} catch (e) {
+  console.warn("Company extraction failed:", e);
+}
+
 
   if (title && company) {
     source = "1"; // DOM
   }
+
+  
 
   // 2) JSON-LD fallback for company/title if missing
   if (!title || !company) {
@@ -66,7 +109,7 @@
   const payload = {
     title: title || null,
     company: company || null,
-    job_url: window.location.href,
+    job_url: getCanonicalJobUrl(),
     source
   };
 

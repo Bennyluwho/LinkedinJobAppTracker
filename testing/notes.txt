@@ -7,3 +7,11 @@ https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4286064370 :
 https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4258571345 : Precision Castparts
 
 outerHTML for these links are already pasted in the testing!!
+
+html command to copy html page:
+copy(document.documentElement.outerHTML)
+
+Bookmarks Keys:
+set a bookmark on a line with Ctrl+Alt+K
+jump to next/previous bookmark with Ctrl+Alt+J / Ctrl+Alt+L
+
