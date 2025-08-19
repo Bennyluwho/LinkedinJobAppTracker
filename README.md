@@ -57,9 +57,9 @@ Example:
 ## 🧪 Tested URL Formats
 
 This extension works on all of the following:
-- `https://www.linkedin.com/jobs/view/1234567890/`
-- `https://www.linkedin.com/jobs/collections/…`
-- `https://www.linkedin.com/jobs/search-results/?currentJobId=1234567890`
+- `https://www.linkedin.com/jobs/view/...`
+- `https://www.linkedin.com/jobs/collections/...`
+- `https://www.linkedin.com/jobs/search-results/...`
 
 It automatically canonicalizes the job to `/jobs/view/<id>/` for consistency.
 
