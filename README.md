@@ -1,202 +1,81 @@
-# LinkedIn Job Tracker  Install This As **Your** Chrome/Edge Extension
+# LinkedIn Job → CSV 📄
 
-This guide shows you how to load this project as your **own local browser extension** (no publishing needed). You’ll be able to click **Save row** on any LinkedIn job page and later **Export CSV** with the fields:
+A lightweight Chrome extension that lets you save LinkedIn job details with one click and export them as a single CSV file — perfect for tracking job applications without leaving your browser.
 
-```
-title, company, location, posted date, job url
-```
+## 🔧 Features
 
-> Optional: you can add a trailing `status` column (e.g., Pending/Accepted/Rejected/Ghosted)  see **Customize columns** below.
+- ✅ Save job **title**, **company**, and **job URL** from:
+  - Job detail pages (`/jobs/view/…`)
+  - Collection panels (`/jobs/collections/…`)
+  - Search results (`/jobs/search-results/?currentJobId=…`)
+- 📥 Export all saved jobs as a downloadable CSV
+- 🗑️ Clear saved jobs with one click
+- 🕶️ Works in both light and dark mode
+- 🛟 100% local – **no data ever leaves your browser**
 
----
+## 🧠 How It Works
 
-## 0) What’s in the folder
+1. Visit any LinkedIn job page (view, collection, or search result)
+2. Open the extension popup
+3. Click **“Save row”**
+4. Repeat as you browse job listings
+5. Click **“Export CSV”** to download your full list
 
-```
-extension/
-  manifest.json   # MV3 manifest (Chrome/Edge/Brave)
-  popup.html      # Popup UI with buttons
-  popup.js        # Logic: inject content script, save rows, export CSV
-  content.js      # Runs on the job page; extracts fields
-bookmarklet/      # Optional: one-click capture as a bookmarklet
-README.md         # This file
-```
+Jobs are de-duplicated automatically by their canonical job URL (`/jobs/view/<id>/`), even across different LinkedIn views.
 
-You only need the **extension/** folder to load the extension.
+## 📦 Output Format
 
----
+Exported CSV contains:
 
-## 1) Prerequisites
+| company | title | job url |
+|---------|-------|---------|
 
-- A Chromium-based browser (Chrome, Microsoft Edge, Brave, Arc, etc.).  
-- You don’t need a developer account; we’ll **load it unpacked** locally.
+Example:
 
-> Firefox note: Firefox MV3 support is still evolving. This project targets Chrome/Edge (MV3).
-
----
-
-## 2) Load the extension (Chrome / Brave / Arc)
-
-1. Open your browser and go to: `chrome://extensions`
-2. Enable **Developer mode** (top-right toggle).
-3. Click **Load unpacked**.
-4. Select the project’s **`extension/`** folder.
-5. (Optional) Click the puzzle icon → **Pin** the extension for easy access.
-
-### Microsoft Edge
-1. Go to `edge://extensions` → enable **Developer mode**.
-2. Click **Load unpacked** → choose the **`extension/`** folder.
-3. Pin the extension.
-
-> If you change any files, click **Reload** (↻) on the extension card to pick up changes.
-
----
-
-## 3) Use the extension
-
-1. Open a LinkedIn job **in its own tab** (URL contains `/jobs/view/...`).
-2. Click the extension icon.
-3. Click **Save row** → you should see **“Saved ✓”**.
-4. Repeat as you browse other jobs.
-5. Click **Export CSV** → a file named `applications.csv` downloads. Open it in Google Sheets/Excel.
-
-**CSV headers (default):**
-```
-title,company,location,posted date,job url
+```csv
+"OpenAI","Research Engineer","https://www.linkedin.com/jobs/view/1234567890/"
+"Spotify","Software Intern","https://www.linkedin.com/jobs/view/9876543210/"
 ```
 
-**Clear** removes the saved rows from your browser’s local storage (handy between sessions).
+## 🛠️ Installation (Developer Mode)
 
----
+1. Clone or download this repo
+2. Open `chrome://extensions/`
+3. Enable **Developer mode**
+4. Click **“Load unpacked”** and select this folder
 
-## 4) Customize columns (optional)
+## 📁 File Structure
 
-All export formatting happens in **`extension/popup.js`**.
-
-- **Change header order**: edit the `HEADERS` array.
-- **Add a `status` column**: extend headers and the row builder.
-
-**Example  add `status` as the last column with default “Pending”:**
-```js
-// popup.js
-const HEADERS = ["title","company","location","posted date","job url","status"];
-const DEFAULT_STATUS = "Pending";
-
-function csvQuote(v){ return `"${String(v ?? "").replace(/"/g,'""')}"`; }
-function toRow(item){
-  return [item.title, item.company, item.location, item.posted_date_iso, item.job_url, DEFAULT_STATUS]
-    .map(csvQuote).join(",");
-}
+```
+├── manifest.json       # Chrome extension config
+├── popup.html          # UI for Save/Export/Clear
+├── popup.js            # Handles scraping + storage
+├── popup.css           # Dark/light theme styling
+├── content.js          # Scraper injected into job tabs
+└── applications.csv    # (optional) your exported file
 ```
 
-After editing, go to `chrome://extensions` and hit **Reload** on the extension.
+## 🧪 Tested URL Formats
 
-> **Dropdowns:** CSV is plain text, so it can’t *contain* dropdowns. Add them in your sheet once via **Data → Data validation**. See the “Status dropdown in Sheets/Excel” section below.
+This extension works on all of the following:
+- `https://www.linkedin.com/jobs/view/1234567890/`
+- `https://www.linkedin.com/jobs/collections/…`
+- `https://www.linkedin.com/jobs/search-results/?currentJobId=1234567890`
 
----
+It automatically canonicalizes the job to `/jobs/view/<id>/` for consistency.
 
-## 5) How the data is captured (mental model)
+## 🧘 Limitations
 
-- When you click **Save row**, the popup injects **`content.js`** into the current tab.
-- `content.js` reads visible fields from the job page using selector fallbacks and small heuristics, then sends them back to the popup.
-- The popup stores a compact object (title/company/location/date/url) in Chrome’s **local storage**.
-- **Export CSV** formats those objects into a CSV file (and de-duplicates by job URL).
+- Only works while browsing jobs on desktop (not mobile app)
+- CSV includes only: title, company, job URL
+- You must manually click “Save row” to record a job
 
-This avoids raw HTTP scraping and works reliably with what your browser already renders.
+## 💡 Tips
 
----
-
-## 6) Status dropdown in Sheets/Excel (recommended)
-
-### Google Sheets
-1. Add a **status** header as your last column.
-2. Select the status range (e.g., `F2:F`).
-3. Data → **Data validation** → **Dropdown** → items:
-   ```
-   Pending, Accepted, Rejected, Ghosted
-   ```
-4. (Optional) Display style **Chip** for colored pills.
-
-**Optional Apps Script to keep validation applied:**
-```js
-function onOpen(){ setStatusValidation_(); }
-function setStatusValidation_(){
-  const sh = SpreadsheetApp.getActiveSheet();
-  const range = sh.getRange("F2:F"); // adjust if your status col differs
-  const rule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["Pending","Accepted","Rejected","Ghosted"], true)
-    .setAllowInvalid(false)
-    .build();
-  range.setDataValidation(rule);
-}
-```
-
-### Excel
-1. Put **status** as the last header (e.g., column F).
-2. Select `F2:F1048576` → Data → **Data Validation** → Allow: **List** → Source:
-   ```
-   Pending,Accepted,Rejected,Ghosted
-   ```
-3. (Optional) **Format as Table** so validation persists for new rows.
+- Paste your CSV into Google Sheets or Excel
+- Use “Data → Split text to columns” if needed
+- Use filters or add columns like `Status` or `Notes` manually
 
 ---
 
-## 7) Common issues & fixes
-
-- **Buttons do nothing**  
-  Reload the extension. Make sure you’re on a **/jobs/view/** page (not the right-hand search preview).  
-  Right-click popup → **Inspect** → check Console for errors.
-
-- **Company or location is empty**  
-  LinkedIn uses multiple layouts. The extractor in `content.js` tries several selectors and JSON-LD. If a field is blank on a specific page:
-  - Open DevTools (F12) on that page
-  - Inspect the elements showing the company/location
-  - Tweak the fallback selectors in `getCompany()` / `getLocation()`
-
-- **Everything pastes into one cell** (Sheets)  
-  Use **Data → Split text to columns → Comma**.
-
-- **Permission prompts or downloads blocked**  
-  The extension uses `activeTab` (granted on click), `scripting` (to run `content.js`), `storage` (to save rows), and `downloads` (to save the CSV). If downloads are blocked, allow them for “linkedin.com” or the extension.
-
----
-
-## 8) Make it your own
-
-- Add columns: `easy_apply`, `work_mode`, `applicants_count`, `description_snippet` (update `HEADERS`, row builder, and `content.js` extraction).
-- Add a **Notes** column (manual notes typed later in your sheet).
-- Export Excel with built‑in dropdowns (use a small ExcelJS build to generate `.xlsx`).
-
----
-
-## 9) Uninstall / clean up
-
-- Remove saved rows: open the popup → **Clear**.  
-- Remove the extension: `chrome://extensions` → **Remove**.  
-- Your CSVs/Sheets stay on your machine or in Drive this tool doesn’t upload data anywhere.
-
----
-
-## 10) License
-
-MIT (or your preferred license). Add a `LICENSE` file at the repo root if you want others to reuse it.
-
----
-
-## 11) Changelog (suggested)
-
-- v1.0.0  Initial public version: Save row, Export CSV, robust selectors for company/location, de-dup by URL.
-
----
-
-## FAQ
-
-**Q: Does this violate LinkedIn’s rules?**  
-A: This reads what *you* can see in your own session for personal tracking. Don’t run it at scale, don’t share cookies, and respect LinkedIn’s Terms of Service and applicable laws.
-
-**Q: Can it auto-append to Google Sheets without downloads?**  
-A: Yesusing Apps Script or the Google Sheets API. This repo keeps things local and simple; feel free to add an API script later.
-
-**Q: Will it work on the right‑hand preview panel in job search?**  
-A: It’s more reliable on full job pages (`/jobs/view/...`). Right‑click the job title → **Open link in new tab** first.
-
+Made with ❤️ for job seekers who want **simple, private tracking** of their applications.
