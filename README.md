@@ -51,8 +51,7 @@ Example:
 ├── popup.html          # UI for Save/Export/Clear
 ├── popup.js            # Handles scraping + storage
 ├── popup.css           # Dark/light theme styling
-├── content.js          # Scraper injected into job tabs
-└── applications.csv    # (optional) your exported file
+└── content.js          # Scraper injected into job tabs
 ```
 
 ## 🧪 Tested URL Formats
