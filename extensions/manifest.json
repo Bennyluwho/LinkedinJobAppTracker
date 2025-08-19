@@ -6,7 +6,8 @@
   "permissions": ["storage", "activeTab", "scripting", "downloads"],
   "host_permissions": [
     "https://www.linkedin.com/jobs/view/*",
-    "https://www.linkedin.com/jobs/collections/*"
+    "https://www.linkedin.com/jobs/collections/*",
+    "https://www.linkedin.com/jobs/search-results/*"
     ],
   "action": { "default_popup": "popup.html" }
 }

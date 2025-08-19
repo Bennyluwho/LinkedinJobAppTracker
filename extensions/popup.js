@@ -26,9 +26,9 @@ async function getActiveJobTabId(){
   const url = tab.url || "";
 
   // allow both /jobs/view/* and /jobs/collections/*
-  const ok = /^https:\/\/www\.linkedin\.com\/jobs\/(view|collections)\//.test(url);
+  const ok = /^https:\/\/www\.linkedin\.com\/jobs\/(view|collections|search-results)\//.test(url);
   if (!ok) {
-    throw new Error("Open a LinkedIn job page first (/jobs/view/ or /jobs/collections/).");
+    throw new Error("Open a LinkedIn job page first (/jobs/view/, /jobs/collections/, or /jobs/search-results/?currentJobId=…).");
   }
   return tab.id;
 }
